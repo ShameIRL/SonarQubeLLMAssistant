@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import datetime
+from json.decoder import JSONDecodeError
 
 from sonarDataAPI.sonar_requestsSpecific import postStatus
 from sonarDataAPI.sonar_preprocessData import preprocessor
@@ -39,7 +40,7 @@ for currKey in keys:
         answerCommentLLM = answerLLM.content
         print(f"The LLM answered: {answerCommentLLM}")
         with open("conversationsLog.txt", "a") as lf:
-            lf.write(f"[{time}] Conversation Answers about Security Hotspot '{currKey}':\n\n{answerCommentLLM}\n")
+            lf.write(f"[{time}]Conversation Answers\nProject Name: '{project_Name}'\nSecurity Hotspot: '{currKey}':\n\n{answerCommentLLM}\n")
         
         parsedAnswerCommentLLM = answer_parse(answerCommentLLM)
         modelRisk = 0 if "IT IS NOT" in parsedAnswerCommentLLM["RISK"] else 1
@@ -62,13 +63,20 @@ for currKey in keys:
         modelComment = "This is a Risk, here is a Solution provided by the LLM:\n" + modelSolution if modelRisk == 1 else "This is not a Risk according to the LLM."
         print(f"\nSOLUTION:\n{modelComment}")
         with open("conversationslog.txt", "a") as lf:
-           lf.write(f"\SOLUTION:\n{modelComment}\n--------------------------------------------------------------------------------\n--------------------------------NEW CONVERSATION--------------------------------\n--------------------------------------------------------------------------------")
-            
-        with open("log.json", "a") as lf:
-            hs_log = json.load(file)
-        hs_log.append({"time": time, "hotspotKey": currKey, "modelSolution": modelSolution})
-        with open("analyzed_hotspots.json", "w") as outFile:
-            json.dump(hs_log, outFile, indent=4)
+           lf.write(f"\nSOLUTION:\n{modelComment}\n--------------------------------------------------------------------------------\n--------------------------------NEW CONVERSATION--------------------------------\n--------------------------------------------------------------------------------\n")
+           
+        conversationData = {"time": time, "projectName": project_Name, "hotspotKey": currKey, "modelSolution": modelComment}
+        log_data = []
+        if os.path.exists("log.json"):
+            try:
+                with open("log.json", 'r') as f:
+                    log_data = json.load(f)
+            except JSONDecodeError:
+                print("Error: Invalid JSON format in log file. Starting with an empty log.")
+                log_data = []
+        log_data.append(conversationData)
+        with open("log.json", 'w') as f:
+            json.dump(log_data, f, indent=4, default=str)          
         
         # UNCOMMENT the next lines to modify the Hotspot Status and add a Comment
         #status = postStatus(key = currKey, resolution = "ACKNOWLEDGED", comment = modelComment)
