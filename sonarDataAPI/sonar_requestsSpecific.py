@@ -17,6 +17,14 @@ class getRuleInfo(getCall):
     def __init__(self, key: str):
         super().__init__("api/rules/show", {"key": key}, "RuleInfo")
         
+class getVulnerabilitiesList(getCall):
+    def __init__(self, project: str, s: str="FILE_LINE", issueStatuses: str="CONFIRMED,OPEN", types: str="VULNERABILITY", ps: str="100", facets: str="", additionalFields: str="", timeZone="Europe/Rome"):
+        super().__init__("api/issues/search", {"components": project, "s": s, "issueStatuses": issueStatuses, "types": types, "ps": ps, "facets": facets, "additionalFields": additionalFields, "timeZone": timeZone}, "VulnerabilitiesList")
+
+class getIssueSnippet(getCall):
+    def __init__(self, issueKey: str):
+        super().__init__("api/sources/issue_snippets", {"issueKey": issueKey}, "IssueSnippets")
+        
 # POST APIs
 class postStatus(postCall):
     def __init__(self, key: str, resolution: str, comment: str, status: str = "REVIEWED"):

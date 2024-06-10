@@ -1,7 +1,7 @@
 import json
 import re
 import os
-from sonarDataAPI.sonar_requestsSpecific import getHotspotsList, getHotspotInfo, getHotspotSnippet, getRuleInfo
+from sonarDataAPI.sonar_requestsSpecific import getHotspotsList, getHotspotInfo, getHotspotSnippet, getRuleInfo, getVulnerabilitiesList, getIssueSnippet
 
 class preprocessor:
     def __init__(self, PROJECT_NAME: str, JSON_NAME: str="PreprocessedData"):
@@ -54,7 +54,7 @@ class preprocessor:
             json.dump(hotspotsData, f, indent=4)
         self.clearJson()
             
-    def addCode(self):
+    def addCodeHS(self):
         with open(self.jsonName+".json", 'r') as hotspotsJson:
             hotspotsData = json.load(hotspotsJson)
         for hotspot in hotspotsData["hotspots"]:
@@ -74,6 +74,78 @@ class preprocessor:
         with open(self.jsonName+".json", 'w') as f:
             json.dump(hotspotsData, f, indent=4)
         self.clearJson()
+        
+    def addVulnerabilities(self):
+        vulnerabilityList = getVulnerabilitiesList(project=self.projectName)
+        vulnerabilityList.createJson()
+        self.tempJson = vulnerabilityList.getJsonName()
+        try:
+            with open(self.tempJson, 'r') as f:
+                jsonData = f.read()
+                data = json.loads(jsonData)
+                keys = [{"vulnerabilityKey": vulnerability["key"],
+                        "status": vulnerability["status"],
+                        "componentKey": vulnerability["component"],
+                        "componentName": vulnerability["component"].split('/')[-1],
+                        "componentPath": vulnerability["component"].split(':', 1)[1],
+                        "lineStart": vulnerability["textRange"]["startLine"],
+                        "lineEnd": vulnerability["textRange"]["endLine"],
+                        "snippetStart": (int(vulnerability["textRange"]["startLine"])-10) if (int(vulnerability["textRange"]["startLine"])-10) > 0 else 1,
+                        "snippetEnd": (int(vulnerability["textRange"]["startLine"])+10),
+                        "ruleKey": vulnerability["rule"]
+                        }for vulnerability in data["issues"]]
+                with open(self.jsonName+".json", 'w') as f:
+                    json.dump({"issues": keys}, f, indent=4)
+        except json.JSONDecodeError as e:
+            print("Error decoding JSON:", e)
+        self.clearJson()
+        
+    def addRuleInfos(self):
+        with open(self.jsonName+".json", 'r') as vulnerabilitiesJson:
+            vulnerabilitiesData = json.load(vulnerabilitiesJson)     
+        for vulnerability in vulnerabilitiesData["issues"]:
+            ruleInfo = getRuleInfo(vulnerability["ruleKey"])
+            ruleInfo.createJson()
+            self.tempJson = ruleInfo.getJsonName()
+            try:
+                with open(self.tempJson, 'r') as f:
+                    jsonData = f.read()
+                    data = json.loads(jsonData)
+                    vulnerability["ruleName"] = data["rule"]["name"]
+                    for section in data["rule"]["descriptionSections"]:
+                        if section["key"] == "introduction":
+                            vulnerability["ruleDescription"] = re.sub(r'<[^>]+>', '', section["content"])
+                        elif section["key"] == "how_to_fix":
+                            vulnerability["ruleSolution"] = re.sub(r'<[^>]+>', '', section["content"])
+                        elif section["key"] == "root_cause":
+                            vulnerability["ruleCause"] = re.sub(r'<[^>]+>', '', section["content"])
+                        elif section["key"] == "resources":
+                            vulnerability["ruleResources"] = re.sub(r'<[^>]+>', '', section["content"])
+            except json.JSONDecodeError as e:
+                print("Error processing hotspot informations:", e)
+        with open(self.jsonName+".json", 'w') as f:
+            json.dump(vulnerabilitiesData, f, indent=4)
+        self.clearJson()
+        
+    def addCodeV(self):
+        with open(self.jsonName+".json", 'r') as vulnerabilitiesJson:
+            vulnerabilitiesData = json.load(vulnerabilitiesJson)
+        for vulnerability in vulnerabilitiesData["issues"]:
+            snippet = getIssueSnippet(vulnerability["vulnerabilityKey"])
+            snippet.createJson()
+            self.tempJson = snippet.getJsonName()
+            try:
+                with open(self.tempJson, 'r') as f:
+                    jsonData = f.read()
+                    data = json.loads(jsonData)
+                    eliminate_classes = ['k', 's', 'sym', 'c', 'cd']
+                    pattern = r'<(?!\/?span\s+class="(?:(?!{}\\b).)*"\s*>)[^>]+>'.format('|'.join(eliminate_classes))
+                    vulnerability["snippet"] = [{"code": "line " + str(line["line"]) + " = " + re.sub(pattern, '', line["code"])} for line in data[vulnerability["componentKey"]]["sources"]]
+            except json.JSONDecodeError as e:
+                print("Error processing hotspot informations:", e)
+        with open(self.jsonName+".json", 'w') as f:
+            json.dump(vulnerabilitiesData, f, indent=4)
+        self.clearJson()
             
     def clearJson(self):
         try:
@@ -84,10 +156,16 @@ class preprocessor:
         except Exception as e:
             print(f"Error occurred while deleting file '{self.tempJson}': {e}")
                      
-    def preprocess(self):
+    def preprocessHS(self):
         self.addKeys()
         self.addInfos()
-        self.addCode()
+        self.addCodeHS()
+        print(f"File '{self.jsonName}'.json created successfully.")
+        
+    def preprocessV(self):
+        self.addVulnerabilities()
+        self.addRuleInfos()
+        self.addCodeV()
         print(f"File '{self.jsonName}'.json created successfully.")
 
     def getJsonName(self):
