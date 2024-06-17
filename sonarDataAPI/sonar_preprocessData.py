@@ -121,6 +121,14 @@ class preprocessor:
                             vulnerability["ruleCause"] = re.sub(r'<[^>]+>', '', section["content"])
                         elif section["key"] == "resources":
                             vulnerability["ruleResources"] = re.sub(r'<[^>]+>', '', section["content"])
+                if "ruleDescription" not in vulnerability or not vulnerability["ruleDescription"]:
+                    vulnerability["ruleDescription"] = "Sorry, but there is no Description available for this Vulnerability."
+                if "ruleSolution" not in vulnerability or not vulnerability["ruleSolution"]:
+                    vulnerability["ruleSolution"] = "Sorry, but there is no Solution Example available for this Vulnerability."
+                if "ruleCause" not in vulnerability or not vulnerability["ruleCause"]:
+                    vulnerability["ruleCause"] = "Sorry, but there is no Cause Description available for this Vulnerability."
+                if "ruleResources" not in vulnerability or not vulnerability["ruleResources"]:
+                    vulnerability["ruleResources"] = "Sorry, but there is no additional Resources available for this Vulnerability."
             except json.JSONDecodeError as e:
                 print("Error processing hotspot informations:", e)
         with open(self.jsonName+".json", 'w') as f:
