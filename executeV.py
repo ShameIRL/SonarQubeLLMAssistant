@@ -10,9 +10,7 @@ from openAPI.openAI_request import getCompletion
 from openAPI.openAI_parse import answer_parse
 
 from variables import project_Name
-from prompts.promptsVFirst import PROMPT_JSON as PROMPT, PROMPT_VALIDATION
-
-# First iteration, future iterations will also include QUESTION prompts
+from prompts.promptsV import PROMPT_JSON as PROMPT, PROMPT_VALIDATION
 
 projectName = project_Name
 exePreprocessor = preprocessor(projectName, "PreprocessedVulnerabilitiesData")
@@ -28,14 +26,14 @@ print(f"Keys found:\n{keys}")
 
 for currKey in keys:
     exeData = data(currKey, "PreprocessedVulnerabilitiesData")
-    check, ruleName, ruleDescription, ruleSolution, ruleCause, ruleResources, componentPath, lineStart, snippetStart, snippetEnd, snippet = exeData.getV()
+    check, ruleName, ruleDescription, ruleSolution, ruleCause, ruleResources, componentKey, lineStart, snippetStart, snippetEnd, snippet = exeData.getV()
     if check == 0:
         print(f"Error encountered retreiving data of Vulnerability '{currKey}'")
     else:
         time = datetime.now()
         print(f"[{time}] Prompting key '{currKey}' to LLM...")
         exeOpen = getCompletion("")
-        firstPrompt = PROMPT.format(componentPath=componentPath, lineStart=lineStart, snippet=snippet, ruleName=ruleName, ruleDescription=ruleDescription, ruleCause=ruleCause, ruleSolution=ruleSolution)
+        firstPrompt = PROMPT.format(componentKey=componentKey, lineStart=lineStart, snippet=snippet, ruleName=ruleName, ruleDescription=ruleDescription, ruleCause=ruleCause, ruleSolution=ruleSolution)
         answerLLM = exeOpen.answer(firstPrompt)
         answerCommentLLM = answerLLM.content
         print(f"The LLM answered: {answerCommentLLM}")

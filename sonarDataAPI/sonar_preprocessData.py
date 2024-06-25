@@ -86,8 +86,6 @@ class preprocessor:
                 keys = [{"vulnerabilityKey": vulnerability["key"],
                         "status": vulnerability["status"],
                         "componentKey": vulnerability["component"],
-                        #"componentName": vulnerability["component"].split('/')[-1],
-                        #"componentPath": vulnerability["component"].split(':', 1)[1],
                         "lineStart": vulnerability["textRange"]["startLine"],
                         "lineEnd": vulnerability["textRange"]["endLine"],
                         "snippetStart": (int(vulnerability["textRange"]["startLine"])-10) if (int(vulnerability["textRange"]["startLine"])-10) > 0 else 1,

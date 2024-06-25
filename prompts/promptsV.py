@@ -2,7 +2,7 @@ PROMPT_JSON = """
 A Vulnerability is a flaw or weakness in the software that can be exploited by an attacker to compromise the system's security.
 Some Vulnerabilities are not real and might be false positives.
 
-- This is a code snippet from {componentPath} where a Vulnerability appears in line {lineStart}:
+- This is a code snippet from {componentKey} where a Vulnerability appears in line {lineStart}:
 CODE SNIPPET:
 {snippet}
 The Vulnerability above happens because {ruleName}.

@@ -18,9 +18,7 @@ class getCompletion:
                 userMessage = [{"role": "system", "content": SYS_MSG}, + {"role": "user", "content": USR_MSG}]
         completion = client.chat.completions.create(
             model = self.model,
-            messages=
-               userMessage
-            ,
+            messages = userMessage,
             temperature=0.7,
         )
         return completion.choices[0].message

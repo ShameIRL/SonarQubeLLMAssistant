@@ -40,4 +40,4 @@ class data:
                 snippet_lines.append(f"{code}")
             return 1, match["ruleName"], match["ruleDescription"], match["ruleSolution"], match["ruleCause"], match["ruleResources"], match["componentKey"], match["lineStart"], match["snippetStart"], match["snippetEnd"], "\n".join(snippet_lines)
         else:
-            return 0, "noRuleName", "noRuleDescription", "noRuleSolution", "noRuleCause", "noRuleResources", "noComponentPath", "noLineStart", "noSnippetStart", "noSnippetEnd", "noSnippet"
+            return 0, "noRuleName", "noRuleDescription", "noRuleSolution", "noRuleCause", "noRuleResources", "noComponentKey", "noLineStart", "noSnippetStart", "noSnippetEnd", "noSnippet"

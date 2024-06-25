@@ -10,9 +10,7 @@ from openAPI.openAI_request import getCompletion
 from openAPI.openAI_parse import answer_parse
 
 from variables import project_Name
-from prompts.promptsHSFirst import PROMPT_JSON as PROMPT, PROMPT_VALIDATION
-
-# First iteration, future iterations will also include QUESTION prompts
+from prompts.promptsHS import PROMPT_JSON as PROMPT, PROMPT_VALIDATION
 
 projectName = project_Name
 exePreprocessor = preprocessor(projectName, "PreprocessedHotspotsData")
