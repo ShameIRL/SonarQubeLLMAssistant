@@ -30,7 +30,7 @@ class getCall:
         return self.jsonName+".json"
     
 class postCall:
-    def __init__(self, API_NAME: str, PARAMS: Dict[str, str,]):
+    def __init__(self, API_NAME: str, PARAMS: Dict[str, str]):
         self.url = SQ_serverURL + API_NAME
         self.bearer = "Bearer " + SQ_token
         self.header = {"Authorization": self.bearer}

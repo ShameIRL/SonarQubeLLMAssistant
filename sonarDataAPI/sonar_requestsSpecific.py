@@ -26,6 +26,14 @@ class getIssueSnippet(getCall):
         super().__init__("api/sources/issue_snippets", {"issueKey": issueKey}, "IssueSnippets")
         
 # POST APIs
-class postStatus(postCall):
+class postHotspotStatus(postCall):
     def __init__(self, key: str, resolution: str, comment: str, status: str = "REVIEWED"):
         super().__init__("api/hotspots/change_status", {"hotspot": key, "status": status, "resolution": resolution, "comment": comment})
+        
+class postIssueStatus(postCall):
+    def __init__(self, issue: str, transition: str):
+        super().__init__("api/issues/do_transition", {"issue": issue, "transition": transition})
+        
+class postIssueComment(postCall):
+    def __init__(self, issue: str, comment: str):
+        super().__init__("api/issues/add_comment", {"issue": issue, "text": comment})

@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 from json.decoder import JSONDecodeError
 
-from sonarDataAPI.sonar_requestsSpecific import postStatus
+from sonarDataAPI.sonar_requestsSpecific import postHotspotStatus
 from sonarDataAPI.sonar_preprocessData import preprocessor
 from sonarDataAPI.sonar_getData import data
 from openAPI.openAI_request import getCompletion
@@ -77,7 +77,7 @@ for currKey in keys:
             json.dump(log_data, f, indent=4, default=str)          
         
         # UNCOMMENT the next lines to modify the Hotspot Status and add a Comment
-        #status = postStatus(key = currKey, resolution = "ACKNOWLEDGED", comment = modelComment)
+        #status = postHotspotStatus(key = currKey, resolution = "ACKNOWLEDGED", comment = modelComment)
         #status.apply()
         
 os.remove(exeJson)
