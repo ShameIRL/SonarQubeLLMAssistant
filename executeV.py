@@ -11,6 +11,7 @@ from openAPI.openAI_parse import answer_parse
 
 from variables import project_Name
 from prompts.promptsV import PROMPT_JSON as PROMPT, PROMPT_VALIDATION
+from prompts.promptQ import PROMPT_QV as PROMPT_Q
 
 projectName = project_Name
 exePreprocessor = preprocessor(projectName, "PreprocessedVulnerabilitiesData")
@@ -34,7 +35,9 @@ for currKey in keys:
         print(f"[{time}] Prompting key '{currKey}' to LLM...")
         exeOpen = getCompletion()
         firstPrompt = PROMPT.format(componentKey=componentKey, lineStart=lineStart, snippet=snippet, ruleName=ruleName, ruleDescription=ruleDescription, ruleCause=ruleCause, ruleSolution=ruleSolution)
-        answerLLM = exeOpen.answer(firstPrompt)
+        fullMessage = [{"role": "user", "content": PROMPT_Q}, {"role": "assistant", "content": "Understood. I will keep in mind the informations given to me and I will do my best to correctly help you with the analysis."},
+                        {"role": "user", "content": firstPrompt}]
+        answerLLM = exeOpen.answer(".", FLL_MSG=fullMessage)
         answerCommentLLM = answerLLM.content
         print(f"The LLM answered: {answerCommentLLM}")
         with open("conversationsLog_vulnerabilities.txt", "a") as lf:
@@ -45,8 +48,9 @@ for currKey in keys:
         modelHelp = parsedAnswerCommentLLM["I_NEED"] if parsedAnswerCommentLLM["I_NEED"] else "_"
         modelSolution = parsedAnswerCommentLLM["SOLUTION"]
        
-        fullMessage = [{"role": "user", "content": firstPrompt}, {"role": "assistant", "content": answerCommentLLM},
-                       {"role": "user", "content": PROMPT_VALIDATION}]
+        fullMessage = [{"role": "user", "content": PROMPT_Q}, {"role": "assistant", "content": "Understood. I will keep in mind the informations given to me and I will do my best to correctly help you with the analysis."},
+                        {"role": "user", "content": firstPrompt}, {"role": "assistant", "content": answerCommentLLM},
+                        {"role": "user", "content": PROMPT_VALIDATION}]
         validateLLM = exeOpen.answer(".", FLL_MSG = fullMessage)
         validateCommentLLM = validateLLM.content
         print(f"\nThe LLM answered: {validateCommentLLM}")
