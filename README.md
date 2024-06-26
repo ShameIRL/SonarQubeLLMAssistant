@@ -1,8 +1,48 @@
+# SonarQube Large Language Model Assistant
+
 [![SonarQube 10.5 Community](https://img.shields.io/badge/SonarQube-10.5_Community-004d80.svg)](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/)
 [![SonarScanner CLI 5.0.1](https://img.shields.io/badge/SonarScanner_CLI-5.0.1-004d80.svg)](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/)
+[![llama.cpp b3233](https://img.shields.io/badge/llama.cpp-b3233-orange.svg)](https://github.com/ggerganov/llama.cpp)
+[![LM Studio 0.2.25](https://img.shields.io/badge/LM_Studio-0.2.25-purple.svg)](https://lmstudio.ai)
 [![Python 3.12.3](https://img.shields.io/badge/Python-3.12.3-blue.svg)](https://www.python.org/downloads/release/python-3123/)
-[![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)](https://www.python.org/downloads/release/python-3123/)
-[![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)](https://www.python.org/downloads/release/python-3123/)
+![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)
+![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)
+
+## Table of Contents
+
++ [About](#about)
++ [Getting Started](#gettingStarted)
+    + [SonarQube \& SonarScanner Installation](#sonarInstall)
+    + [SonarQube Prerequisites](#sonarPrerequisites)
+    + [Large Language Models Prerequisites](#largeLanguageModelsPrerequisites)
+    + [Python \& Libraries Prerequisites](#pythonPrerequisites)
++ [Execution](#execution)
+    + [Variables Definition](#variablesDefinition)
+    + [Security Hotspots Analysis](#securityHotspotEXE)
+    + [Vulnerabilities Analysis](#vulnerabilityEXE)
+  
+## About <a name = "about"></a>
+
+## Getting Started <a name = "gettingStarted"></a>
+
+### SonarQube \& SonarScanner Installation <a name = "sonarInstall"></a>
+
+### SonarQube Prerequisites <a name = "sonarPrerequisites"></a>
+
+### Large Language Models Prerequisites <a name = "largeLanguageModelsPrerequisites"></a>
+
+### Python \& Libraries Prerequisites <a name = "pythonPrerequisites"></a>
+
+## Execution <a name = "execution"></a>
+
+### Variables Definition <a name = "variablesDefinition"></a>
+
+### Security Hotspots Analysis <a name = "securityHotspotEXE"></a>
+
+### Vulnerabilities Analysis <a name = "vulnerabilityEXE"></a>
+
+
+
 
 # SonarQube LLM Assistant
 Verifying SonarQube Security Hotspots and Vulnerabilities reports with LLM.
