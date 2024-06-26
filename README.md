@@ -1,3 +1,9 @@
+[![SonarQube 10.5 Community](https://img.shields.io/badge/SonarQube-10.5_Community-004d80.svg)](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/)
+[![SonarScanner CLI 5.0.1](https://img.shields.io/badge/SonarScanner_CLI-5.0.1-004d80.svg)](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/)
+[![Python 3.12.3](https://img.shields.io/badge/Python-3.12.3-blue.svg)](https://www.python.org/downloads/release/python-3123/)
+[![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)](https://www.python.org/downloads/release/python-3123/)
+[![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)](https://www.python.org/downloads/release/python-3123/)
+
 # SonarQube LLM Assistant
 Verifying SonarQube Security Hotspots and Vulnerabilities reports with LLM.
 
