@@ -32,7 +32,7 @@ for currKey in keys:
     else:
         time = datetime.now()
         print(f"[{time}] Prompting key '{currKey}' to LLM...")
-        exeOpen = getCompletion("")
+        exeOpen = getCompletion()
         firstPrompt = PROMPT.format(componentPath = componentPath, lineStart = lineStart, snippet = snippet, ruleRiskDescription = ruleRiskDescription, ruleRiskAssessment = ruleRiskAssessment, ruleRiskSolution = ruleRiskSolution)
         answerLLM = exeOpen.answer(firstPrompt)
         answerCommentLLM = answerLLM.content
@@ -58,6 +58,9 @@ for currKey in keys:
             modelSolution = parsedAnswerCommentLLM["SOLUTION"]
             modelRisk = 0 if "IT IS NOT" in parsedAnswerCommentLLM["RISK"] else 1
             
+        if modelSolution == "":
+            modelSolution = "Error parsing the .JSON format provided by the LLM"
+         
         modelComment = "This is a Risk, here is a Solution provided by the LLM:\n" + modelSolution if modelRisk == 1 else "This is not a Risk according to the LLM."
         print(f"\nSOLUTION:\n{modelComment}")
         with open("conversationsLog_Hotspots.txt", "a") as lf:
@@ -76,8 +79,7 @@ for currKey in keys:
         with open("logHotspots.json", 'w') as f:
             json.dump(log_data, f, indent=4, default=str)          
         
-        # UNCOMMENT the next lines to modify the Hotspot Status and add a Comment
-        #status = postHotspotStatus(key = currKey, resolution = "ACKNOWLEDGED", comment = modelComment)
-        #status.apply()
+        status = postHotspotStatus(key = currKey, resolution = "ACKNOWLEDGED", comment = modelComment)
+        status.apply()
         
 os.remove(exeJson)

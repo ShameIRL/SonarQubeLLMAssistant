@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 from json.decoder import JSONDecodeError
 
-from sonarDataAPI.sonar_requestsSpecific import postStatus
+from sonarDataAPI.sonar_requestsSpecific import postIssueStatus, postIssueComment
 from sonarDataAPI.sonar_preprocessData import preprocessor
 from sonarDataAPI.sonar_getData import data
 from openAPI.openAI_request import getCompletion
@@ -32,7 +32,7 @@ for currKey in keys:
     else:
         time = datetime.now()
         print(f"[{time}] Prompting key '{currKey}' to LLM...")
-        exeOpen = getCompletion("")
+        exeOpen = getCompletion()
         firstPrompt = PROMPT.format(componentKey=componentKey, lineStart=lineStart, snippet=snippet, ruleName=ruleName, ruleDescription=ruleDescription, ruleCause=ruleCause, ruleSolution=ruleSolution)
         answerLLM = exeOpen.answer(firstPrompt)
         answerCommentLLM = answerLLM.content
@@ -57,12 +57,15 @@ for currKey in keys:
             parsedAnswerCommentLLM = answer_parse(validateCommentLLM)
             modelSolution = parsedAnswerCommentLLM["SOLUTION"]
             modelRisk = 0 if "IT IS NOT" in parsedAnswerCommentLLM["RISK"] else 1
-            
+        
+        if modelSolution == "":
+            modelSolution = "Error parsing the .JSON format provided by the LLM"
+        
         modelComment = "This is a Risk, here is a Solution provided by the LLM:\n" + modelSolution if modelRisk == 1 else "This is not a Risk according to the LLM."
         print(f"\nSOLUTION:\n{modelComment}")
         with open("conversationsLog_Vulnerabilities.txt", "a") as lf:
            lf.write(f"\nSOLUTION:\n{modelComment}\n--------------------------------------------------------------------------------\n--------------------------------NEW CONVERSATION--------------------------------\n--------------------------------------------------------------------------------\n")
-           
+        
         conversationData = {"time": time, "projectName": project_Name, "vulnerabilityKey": currKey, "modelSolution": modelComment}
         log_data = []
         if os.path.exists("logVulnerabilities.json"):
@@ -74,6 +77,12 @@ for currKey in keys:
                 log_data = []
         log_data.append(conversationData)
         with open("logVulnerabilities.json", 'w') as f:
-            json.dump(log_data, f, indent=4, default=str)          
+            json.dump(log_data, f, indent=4, default=str)  
+            
+        transition = "accept" if modelRisk == 1 else "falsepositive"
+        status = postIssueStatus(issue = currKey, transition = transition)
+        statusComment = postIssueComment(issue = currKey, comment = modelComment)
+        status.apply()
+        statusComment.apply()     
                 
 os.remove(exeJson)
