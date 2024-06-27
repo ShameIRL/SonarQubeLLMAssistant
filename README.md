@@ -2,11 +2,13 @@
 
 [![SonarQube 10.5 Community](https://img.shields.io/badge/SonarQube-10.5_Community-004d80.svg)](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/)
 [![SonarScanner CLI 5.0.1](https://img.shields.io/badge/SonarScanner_CLI-5.0.1-004d80.svg)](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/)
-[![llama.cpp b3233](https://img.shields.io/badge/llama.cpp-b3233-orange.svg)](https://github.com/ggerganov/llama.cpp)
-[![LM Studio 0.2.25](https://img.shields.io/badge/LM_Studio-0.2.25-purple.svg)](https://lmstudio.ai)
 [![Python 3.12.3](https://img.shields.io/badge/Python-3.12.3-blue.svg)](https://www.python.org/downloads/release/python-3123/)
 ![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)
 ![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)
+
+> [!NOTE]
+> The content of this Repository is guaranteed to work with the above listed versions, as per last test; \
+> Future versions might work as well but there is no guarantee.
 
 ## Table of Contents
 
@@ -23,36 +25,61 @@
   
 ## About <a name = "about"></a>
 
+This Repository contains the experimental solution produced during an Internship at [_Zucchetti S.p.A._](https://www.zucchetti.com/worldwide/cms/home.html), which aimed to study the capabilities of small size _Large Language Models_ (range 3B to 8B) and test various techniques to improve them. The practical application context of this experimental study was _Static Analysis Softwares_, specifically the _SonarQube_ platform. \
+The solution produced automatically obtains the project reports related to _Security Hotspots_ and _Vulnerabilities_ from _SonarQube_. A _Large Language Model_ then automatically performs the analysis of each report. Eventually it automatically changes the status of the analyzed report, discarding false positives, and adds a comment containing a possible solution. \
+The below [_Getting Started_](#gettingStarted) section defines how to setup the _SonarQube_ platform and lists a series of prerequisites necessary to the execute the solution, while the [_Execution_](#execution) section explains how to properly execute this experimental solution.
+
 ## Getting Started <a name = "gettingStarted"></a>
 
 ### SonarQube \& SonarScanner Installation <a name = "sonarInstall"></a>
 
+> [!IMPORTANT]
+> Please note that the external links may change and not be reachable in the future; \
+> Also note that the links redirecting to the _SonarQube_ documentation are related to _SonarQube 10.5_. To change version select it from the top-left drop down version menu.
+
+_SonarQube_ installation is straight forward and it can be downloaded [_here_](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/). \
+_SonarQube_ requires _SonarScanner_ to perform project analyses. _SonarScanner_ has different version, during the Internship the projects that were analyzed where locally stored, so _SonarScanner CLI_ was used. _SonarScanner CLI_ installation is straight forward and it can be downloaded [_here_](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/) from the _SonarQube_ documentation section. \
+Additional detailed information about the platfrom are found in the platform's [_documentation_](https://docs.sonarsource.com/sonarqube/10.5/).
+
 ### SonarQube Prerequisites <a name = "sonarPrerequisites"></a>
+
+To run the scripts a project must exist in the _SonarQube_ platform. The project needs to have been analyzed by _SonarScanner_. At least one _Security Hotspot_ or _Vulnerability_ has to be present in the project. To check their presence the user needs to navigate to the _Security Hotspots_ section in the first case, while for the latter the user needs to navigate in the _Issues_ section and then select the _Vulnerability_ type. Their presence can also be easily checked through the project's card in the _SonarQube_ projects main page, checking for _Security_ and _Hotspots_. \
+The _SonarQube_ platform needs to be running for the scripts to work.
 
 ### Large Language Models Prerequisites <a name = "largeLanguageModelsPrerequisites"></a>
 
+> [!TIP]
+> The bigger the _Large Language Model_ the better the performance should be, avoid quantized models; \
+> _StarlingLM ExPO_ is suggested for limited hardware devices, as per best benchmark results; \
+> _LM Studio_ is suggested to run the _Large Language Model_ due to its easy usability.
+
+
+To run the scripts a _Large Language Model_ needs to be loaded in a server that can be contacted through _OpenAI APIs_. \
+This solution was mainly tested with single _Large Language Model_ servers, however servers that can run multiple _Large Language Models_ are supported as well.
+
 ### Python \& Libraries Prerequisites <a name = "pythonPrerequisites"></a>
+
+_Python_ is required, along with the _openai_ and _requests_ libraries. \
+The versions used in the development are _Python 3.12.3_, _openai 1.30.1_ and _requests 2.31.0_, however any version should work.
 
 ## Execution <a name = "execution"></a>
 
 ### Variables Definition <a name = "variablesDefinition"></a>
 
+Before executing the scripts a series of variables must be specified in the following files:
+- _"variables.py"_ contains specific variables related to the _SonarQube_ and the _Large Language Model_ servers.
+- _"variableQuestions.py"_ contains the answers to specific questions that will allow the _Large Language Model_ to perform the analysis better, due to additional context.
+
+Edit the above files by adding the information required by the comments related to each variable before running the scripts.
+
 ### Security Hotspots Analysis <a name = "securityHotspotEXE"></a>
+
+To perform the analysis of _Security Hotspots_ simply run the _"executeHS.py"_ file. \
+This execution analyzes the selected project's _Security Hotspots_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
+A _"conversationsLog_Hotspots.txt"_ file is created keeping track of all the conversations with the _Large Language Model_ in their entirety, while a _"logHotspots.json"_ file provides the solution provided by the _Large Language Model_ for each analyzed _Security Hotspot_.
 
 ### Vulnerabilities Analysis <a name = "vulnerabilityEXE"></a>
 
-
-
-
-# SonarQube LLM Assistant
-Verifying SonarQube Security Hotspots and Vulnerabilities reports with LLM.
-
-Use is simple:
-- insert the correct variables in the "variables.py" file;
-- run the "executeHS.py" file (Security Hotspots) or the "executeV.py" (Vulnerabilities).
-
-The execution will create two files:
-- "conversationsLog_Hotspots/Vulnerabilities.txt": contains all the answers generated by the LLM in all the conversations;
-- "logHotspots/Vulnerabilities.json": contains tuples with Hotspot IDs and the related result given by the LLM, with a possible solution in case of a real risk.
-
-Tests are currently happening to improve the process.
+To perform the analysis of _Vulnerabilities_ simply run the _"executeV.py"_ file.
+This execution analyzes the selected project's _Vulnerabilities_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
+A _"conversationsLog_Vulnerabilities.txt"_ file is created keeping track of all the conversations with the _Large Language Model_ in their entirety, while a _"logVulnerabilities.json"_ file provides only the solution provided by the _Large Language Model_ for each analyzed _Vulnerability_.
