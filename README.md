@@ -38,13 +38,47 @@ The below [_Getting Started_](#gettingStarted) section defines how to setup the 
 > Also note that the links redirecting to the _SonarQube_ documentation are related to _SonarQube 10.5_. To change version select it from the top-left drop down version menu.
 
 _SonarQube_ installation is straight forward and it can be downloaded [_here_](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/). \
-_SonarQube_ requires _SonarScanner_ to perform project analyses. _SonarScanner_ has different version, during the Internship the projects that were analyzed where locally stored, so _SonarScanner CLI_ was used. _SonarScanner CLI_ installation is straight forward and it can be downloaded [_here_](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/) from the _SonarQube_ documentation section. \
+_SonarQube_ requires _SonarScanner_ to perform project analyses. _SonarScanner_ has different editions, during the Internship the projects that were analyzed where locally stored, so _SonarScanner CLI_ was used. _SonarScanner CLI_ installation is straight forward and it can be downloaded [_here_](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/) from the _SonarQube_ documentation section. \
 Additional detailed information about the platfrom are found in the platform's [_documentation_](https://docs.sonarsource.com/sonarqube/10.5/).
 
 ### SonarQube Prerequisites <a name = "sonarPrerequisites"></a>
 
-To run the scripts a project must exist in the _SonarQube_ platform. The project needs to have been analyzed by _SonarScanner_. At least one _Security Hotspot_ or _Vulnerability_ has to be present in the project. To check their presence the user needs to navigate to the _Security Hotspots_ section in the first case, while for the latter the user needs to navigate in the _Issues_ section and then select the _Vulnerability_ type. Their presence can also be easily checked through the project's card in the _SonarQube_ projects main page, checking for _Security_ and _Hotspots_. \
-The _SonarQube_ platform needs to be running for the scripts to work.
+The _SonarQube_ platform needs to be running for the projects to be created and for the scripts to work. \
+To start the _SonarQube_ platform the command is:
+
+- Linux:
+``` bash
+$ cd path/to/sonarqube/folder
+$ bin/linux-x86-64/sonar.sh console
+```
+- macOS:
+``` bash
+$ cd path/to/sonarqube/folder
+$ bin/macosx-universal-64/sonar.sh console
+```
+- Windows:
+``` bash
+$ cd path\to\project\base\folder
+$ bin\windows-x86-64\SonarService.bat console
+```
+To run the scripts a project must exist in the _SonarQube_ platform. The project needs to have been analyzed by _SonarScanner_. \
+The analysis is performed during the creation process of a _SonarQube_ project. After selecting some project variables _SonarQube_ displays a command to execute the analysis through _SonarScanner_. The following command performs the analysis of a locally stored project, project specific variables between angle brackets:
+
+- Linux \& macOS:
+``` bash
+$ cd path/to/project/base/folder
+$ sonar-scanner \
+    -Dsonar.projectKey=<projectName> \
+    -Dsonar.sources=. \
+    -Dsonar.host.url=<sonarQubeURL> \
+    -Dsonar.token=<projectAnalysisToken>
+```
+- Windows:
+``` bash
+$ cd path\to\project\base\folder
+sonar-scanner.bat -D"sonar.projectKey=<projectName>" -D"sonar.sources=." -D"sonar.host.url=<sonarQubeURL>" -D"sonar.token=<projectAnalysisToken>"
+```
+At least one _Security Hotspot_ or _Vulnerability_ has to be detected in the project. To check their presence the user needs to navigate to the _Security Hotspots_ section in the first case, while for the latter the user needs to navigate in the _Issues_ section and then select the _Vulnerability_ type. Their presence can also be easily checked through the project's card in the _SonarQube_ projects main page, checking for _Security_ and _Hotspots_.
 
 ### Large Language Models Prerequisites <a name = "largeLanguageModelsPrerequisites"></a>
 
@@ -52,7 +86,6 @@ The _SonarQube_ platform needs to be running for the scripts to work.
 > The bigger the _Large Language Model_ the better the performance should be, avoid quantized models; \
 > _StarlingLM ExPO_ is suggested for limited hardware devices, as per best benchmark results; \
 > _LM Studio_ is suggested to run the _Large Language Model_ due to its easy usability.
-
 
 To run the scripts a _Large Language Model_ needs to be loaded in a server that can be contacted through _OpenAI APIs_. \
 This solution was mainly tested with single _Large Language Model_ servers, however servers that can run multiple _Large Language Models_ are supported as well.
@@ -75,9 +108,15 @@ Edit the above files by adding the information required by the comments related 
 ### Security Hotspots Analysis <a name = "securityHotspotEXE"></a>
 
 Once the [prerequisites](#gettingStarted) are respected, the analysis of _Security Hotspots_ can be performed by simply executing the _"executeHS.py"_ file:
-
+- Linux \& macOS:
 ``` bash
+$ cd path/to/the/execute/file
 $ python3 executeHS.py
+```
+- Windows:
+``` bash
+$ cd path\to\the\execute\file
+$ python executeHS.py
 ```
 This execution analyzes the selected project's _Security Hotspots_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
 A _"conversationsLog_Hotspots.txt"_ file is created to keep track of all the conversations with the _Large Language Model_ in their entirety, while a _"logHotspots.json"_ file tracks the solutions provided by the _Large Language Model_ for each analyzed _Security Hotspot_.
@@ -85,9 +124,15 @@ A _"conversationsLog_Hotspots.txt"_ file is created to keep track of all the con
 ### Vulnerabilities Analysis <a name = "vulnerabilityEXE"></a>
 
 Once the [prerequisites](#gettingStarted) are respected, the analysis of _Vulnerabilities_ can be performed by simply executing the _"executeV.py"_ file:
-
+- Linux \& macOS:
 ``` bash
+$ cd path/to/the/execute/file
 $ python3 executeV.py
+```
+- Windows:
+``` bash
+$ cd path\to\the\execute\file
+$ python executeV.py
 ```
 This execution analyzes the selected project's _Vulnerabilities_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
 A _"conversationsLog_Vulnerabilities.txt"_ file is created to keep track of all the conversations with the _Large Language Model_ in their entirety, while a _"logVulnerabilities.json"_ file tracks only the solutions provided by the _Large Language Model_ for each analyzed _Vulnerability_.
