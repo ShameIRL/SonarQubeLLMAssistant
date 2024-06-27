@@ -7,7 +7,7 @@
 ![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)
 
 > [!NOTE]
-> The content of this Repository is guaranteed to work with the above listed versions, as per last test; \
+> The content of this Repository is not guaranteed to work with versions differing from the ones listed above; \
 > Future versions might work as well but there is no guarantee.
 
 ## Table of Contents
@@ -74,12 +74,20 @@ Edit the above files by adding the information required by the comments related 
 
 ### Security Hotspots Analysis <a name = "securityHotspotEXE"></a>
 
-To perform the analysis of _Security Hotspots_ simply run the _"executeHS.py"_ file. \
+Once the [prerequisites](#gettingStarted) are respected, the analysis of _Security Hotspots_ can be performed by simply executing the _"executeHS.py"_ file:
+
+``` bash
+$ python3 executeHS.py
+```
 This execution analyzes the selected project's _Security Hotspots_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
-A _"conversationsLog_Hotspots.txt"_ file is created keeping track of all the conversations with the _Large Language Model_ in their entirety, while a _"logHotspots.json"_ file provides the solution provided by the _Large Language Model_ for each analyzed _Security Hotspot_.
+A _"conversationsLog_Hotspots.txt"_ file is created to keep track of all the conversations with the _Large Language Model_ in their entirety, while a _"logHotspots.json"_ file tracks the solutions provided by the _Large Language Model_ for each analyzed _Security Hotspot_.
 
 ### Vulnerabilities Analysis <a name = "vulnerabilityEXE"></a>
 
-To perform the analysis of _Vulnerabilities_ simply run the _"executeV.py"_ file.
+Once the [prerequisites](#gettingStarted) are respected, the analysis of _Vulnerabilities_ can be performed by simply executing the _"executeV.py"_ file:
+
+``` bash
+$ python3 executeV.py
+```
 This execution analyzes the selected project's _Vulnerabilities_ and edits their statuses on the _SonarQube_ platform, while adding a comment containing the _Large Language Model_'s resolution. \
-A _"conversationsLog_Vulnerabilities.txt"_ file is created keeping track of all the conversations with the _Large Language Model_ in their entirety, while a _"logVulnerabilities.json"_ file provides only the solution provided by the _Large Language Model_ for each analyzed _Vulnerability_.
+A _"conversationsLog_Vulnerabilities.txt"_ file is created to keep track of all the conversations with the _Large Language Model_ in their entirety, while a _"logVulnerabilities.json"_ file tracks only the solutions provided by the _Large Language Model_ for each analyzed _Vulnerability_.
