@@ -3,8 +3,8 @@
 [![SonarQube 10.5 Community](https://img.shields.io/badge/SonarQube-10.5_Community-004d80.svg)](https://www.sonarsource.com/products/sonarqube/downloads/historical-downloads/)
 [![SonarScanner CLI 5.0.1](https://img.shields.io/badge/SonarScanner_CLI-5.0.1-004d80.svg)](https://docs.sonarsource.com/sonarqube/10.5/analyzing-source-code/scanners/sonarscanner/)
 [![Python 3.12.3](https://img.shields.io/badge/Python-3.12.3-blue.svg)](https://www.python.org/downloads/release/python-3123/)
-![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)
-![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)
+[![openai 1.30.1](https://img.shields.io/badge/openai-1.30.1-blue.svg)](https://pypi.org/project/openai/#history)
+[![requests 2.31.0](https://img.shields.io/badge/requests-2.31.0-blue.svg)](https://pypi.org/project/requests/#history)
 
 > [!NOTE]
 > The content of this Repository is not guaranteed to work with versions different from the ones listed above.
@@ -75,7 +75,7 @@ $ sonar-scanner \
 - Windows:
 ``` bash
 $ cd path\to\project\base\folder
-sonar-scanner.bat -D"sonar.projectKey=<projectName>" -D"sonar.sources=." -D"sonar.host.url=<sonarQubeURL>" -D"sonar.token=<projectAnalysisToken>"
+$ sonar-scanner.bat -D"sonar.projectKey=<projectName>" -D"sonar.sources=." -D"sonar.host.url=<sonarQubeURL>" -D"sonar.token=<projectAnalysisToken>"
 ```
 At least one _Security Hotspot_ or _Vulnerability_ has to be detected in the project. To check their presence the user needs to navigate to the _Security Hotspots_ section of a project in the first case, while for the latter the user needs to navigate in the _Issues_ section and then select the _Vulnerability_ type. Their presence can also be easily checked through the project's card in the _SonarQube_ projects main page, checking for _Security_ and _Hotspots_.
 

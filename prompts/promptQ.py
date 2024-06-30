@@ -22,5 +22,5 @@ Here is an extensive list of File Paths for each file in the Application:
 Keep these informations in mind while assisting with the analysis of the {HSorV}.
 """
 
-PROMPT_QV = PROMPT.format(HSorV="Security Hotspot", ApplicationServices=ApplicationServices, InternetExposure=InternetExposure, PrivilegedRequirements=PrivilegeRequirements, EnvironmentManagement=EnvironmentManagement, ProtectionConfig=ProtectionConfig, EncryptionPractices=EncryptionPractices, TrustedOrigins=TrustedOrigins, FilePaths=FilePaths)
-PROMPT_QHS = PROMPT.format(HSorV="Vulnerability", ApplicationServices=ApplicationServices, InternetExposure=InternetExposure, PrivilegedRequirements=PrivilegeRequirements, EnvironmentManagement=EnvironmentManagement, ProtectionConfig=ProtectionConfig, EncryptionPractices=EncryptionPractices, TrustedOrigins=TrustedOrigins, FilePaths=FilePaths)
+PROMPT_QV = PROMPT.format(HSorV="Security Hotspot", ApplicationServices=ApplicationServices, InternetExposure=InternetExposure, PrivilegeRequirements=PrivilegeRequirements, EnvironmentManagement=EnvironmentManagement, ProtectionConfig=ProtectionConfig, EncryptionPractices=EncryptionPractices, TrustedOrigins=TrustedOrigins, FilePaths=FilePaths)
+PROMPT_QHS = PROMPT.format(HSorV="Vulnerability", ApplicationServices=ApplicationServices, InternetExposure=InternetExposure, PrivilegeRequirements=PrivilegeRequirements, EnvironmentManagement=EnvironmentManagement, ProtectionConfig=ProtectionConfig, EncryptionPractices=EncryptionPractices, TrustedOrigins=TrustedOrigins, FilePaths=FilePaths)
