@@ -57,7 +57,7 @@ $ bin/macosx-universal-64/sonar.sh console
 ```
 - Windows:
 ``` bash
-$ cd path\to\project\base\folder
+$ cd path\to\sonarqube\folder
 $ bin\windows-x86-64\SonarService.bat console
 ```
 To run the scripts a project must exist in the _SonarQube_ platform. The project needs to have been analyzed by _SonarScanner_. \
